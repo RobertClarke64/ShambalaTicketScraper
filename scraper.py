@@ -4,6 +4,7 @@ import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from datetime import datetime
 
 SMTP_SERVER = ""
 SMTP_PORT = 0
@@ -122,5 +123,9 @@ if __name__ == "__main__":
         print("Sent email")
     else:
         print("Site not changed")
+
+    file = open("timerun.txt", "a+")
+    file.write(str(datetime.now().time()) + "\n")
+    file.close()
 
     print("End of program")
