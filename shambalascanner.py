@@ -83,7 +83,7 @@ def checkPage(filePath):
 
     urlpage = 'https://www.shambalafestival.org/buy-tickets/'
     options = webdriver.ChromeOptions()
-    #options.add_argument('headless')
+    options.add_argument('headless')
     driver = webdriver.Chrome(options=options)
 
     driver.get(urlpage)
@@ -115,7 +115,7 @@ def checkPage(filePath):
 
     driver.quit()
 
-    return results
+    return result
 
 
 
@@ -130,15 +130,24 @@ if __name__ == "__main__":
     if args.template or not os.path.isfile("template.html"):
         template()
         print("Created template from current page state")
+        same = true
     else:
-        checkPage("current.html")
+        result = checkPage("current.html")
+        file = open("template.html", "r")
+        template = file.read()
+        file.close()
 
+        same = template == result
 
-
-    sendText()
+        if not same:
+            print("Site changed")
+            sendText()
+        else:
+            print("Site not changed")
 
 
     now = datetime.now()
     file = open("timerun.txt", "a+")
-    file.write(str(now.date()) + " " + str(now.time()) + "\n")
+    file.write(str(now.date()) + " " + str(now.time()) + "\n" + "Page " +
+               ("same" if same else "different") +"\n")
     file.close()
